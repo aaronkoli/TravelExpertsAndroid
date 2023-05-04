@@ -12,6 +12,9 @@
         android:theme="@style/Theme.TravelExpertsAndroid"
         tools:targetApi="31">
         <activity
+            android:name=".AllCustomersView"
+            android:exported="false" />
+        <activity
             android:name=".CustomerForm"
             android:exported="false" />
         <activity
