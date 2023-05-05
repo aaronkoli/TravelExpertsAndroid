@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     ListView lvCustomers;
     Button btnCreate;
+    Button btnViewAll;
 
     ArrayAdapter<Customer> adapter;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         lvCustomers = findViewById(R.id.lvCustomers);
         btnCreate = findViewById(R.id.btnCreate);
+        btnViewAll = findViewById(R.id.btnViewAll);
 
         lvCustomers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -38,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CustomerForm.class);
+                startActivity(intent);
+            }
+        });
+
+        btnViewAll.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(getApplicationContext(), AllCustomersView.class);
                 startActivity(intent);
             }
         });
