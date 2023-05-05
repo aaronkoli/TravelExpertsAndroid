@@ -51,6 +51,7 @@ public class AllCustomersView extends AppCompatActivity {
                         try
                         {
                             JSONObject resjo = new JSONObject(response);
+                            Iterator<?> keys = resjo.keys();
 
                         } catch (JSONException e)
                         {
