@@ -35,6 +35,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="New Customer" />
+
+        <Button
+            android:id="@+id/btnViewAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Customers" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
