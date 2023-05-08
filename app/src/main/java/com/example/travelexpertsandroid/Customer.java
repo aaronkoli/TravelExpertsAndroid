@@ -1,37 +1,69 @@
 package com.example.travelexpertsandroid;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
-public class Customer implements Serializable {
+public class Customer implements Parcelable {
     private int customerId;
     private String custFirstName;
     private String custLastName;
-    private String etCustAddress;
-    private String etCustCity;
-    private String etCustProv;
-    private String etCustPostal;
-    private String etCustCountry;
-    private String etCustHomePhone;
-    private String etCustBusPhone;
-    private String etCustEmail;
-    private int etAgentId;
+    private String custAddress;
+    private String custCity;
+    private String custProv;
+    private String custPostal;
+    private String custCountry;
+    private String custHomePhone;
+    private String custBusPhone;
+    private String custEmail;
+    private int agentId;
 
-    public Customer(int customerId, String custFirstName, String custLastName,
-                    String etCustAddress, String etCustCity, String etCustProv, String etCustPostal, String etCustCountry,
-                    String etCustHomePhone, String etCustBusPhone, String etCustEmail, int etAgentId) {
+    public Customer(int customerId, String custFirstName, String custLastName, String custAddress,
+                    String custCity, String custProv, String custPostal, String custCountry,
+                    String custHomePhone, String custBusPhone, String custEmail, int agentId) {
         this.customerId = customerId;
         this.custFirstName = custFirstName;
         this.custLastName = custLastName;
-        this.etCustAddress = etCustAddress;
-        this.etCustCity = etCustCity;
-        this.etCustProv = etCustProv;
-        this.etCustPostal = etCustPostal;
-        this.etCustCountry = etCustCountry;
-        this.etCustHomePhone = etCustHomePhone;
-        this.etCustBusPhone = etCustBusPhone;
-        this.etCustEmail = etCustEmail;
-        this.etAgentId = etAgentId;
+        this.custAddress = custAddress;
+        this.custCity = custCity;
+        this.custProv = custProv;
+        this.custPostal = custPostal;
+        this.custCountry = custCountry;
+        this.custHomePhone = custHomePhone;
+        this.custBusPhone = custBusPhone;
+        this.custEmail = custEmail;
+        this.agentId = agentId;
     }
+
+    protected Customer(Parcel in) {
+        customerId = in.readInt();
+        custFirstName = in.readString();
+        custLastName = in.readString();
+        custAddress = in.readString();
+        custCity = in.readString();
+        custProv = in.readString();
+        custPostal = in.readString();
+        custCountry = in.readString();
+        custHomePhone = in.readString();
+        custBusPhone = in.readString();
+        custEmail = in.readString();
+        agentId = in.readInt();
+    }
+
+    public static final Creator<Customer> CREATOR = new Creator<Customer>() {
+        @Override
+        public Customer createFromParcel(Parcel in) {
+            return new Customer(in);
+        }
+
+        @Override
+        public Customer[] newArray(int size) {
+            return new Customer[size];
+        }
+    };
 
     public int getCustomerId() {
         return customerId;
@@ -57,75 +89,104 @@ public class Customer implements Serializable {
         this.custLastName = custLastName;
     }
 
-    public String getEtCustAddress() {
-        return etCustAddress;
+    public String getCustAddress() {
+        return custAddress;
     }
 
-    public void setEtCustAddress(String etCustAddress) {
-        this.etCustAddress = etCustAddress;
+    public void setCustAddress(String custAddress) {
+        this.custAddress = custAddress;
     }
 
-    public String getEtCustCity() {
-        return etCustCity;
+    public String getCustCity() {
+        return custCity;
     }
 
-    public void setEtCustCity(String etCustCity) {
-        this.etCustCity = etCustCity;
+    public void setCustCity(String custCity) {
+        this.custCity = custCity;
     }
 
-    public String getEtCustProv() {
-        return etCustProv;
+    public String getCustProv() {
+        return custProv;
     }
 
-    public void setEtCustProv(String etCustProv) {
-        this.etCustProv = etCustProv;
+    public void setCustProv(String custProv) {
+        this.custProv = custProv;
     }
 
-    public String getEtCustPostal() {
-        return etCustPostal;
+    public String getCustPostal() {
+        return custPostal;
     }
 
-    public void setEtCustPostal(String etCustPostal) {
-        this.etCustPostal = etCustPostal;
+    public void setCustPostal(String custPostal) {
+        this.custPostal = custPostal;
     }
 
-    public String getEtCustCountry() {
-        return etCustCountry;
+    public String getCustCountry() {
+        return custCountry;
     }
 
-    public void setEtCustCountry(String etCustCountry) {
-        this.etCustCountry = etCustCountry;
+    public void setCustCountry(String custCountry) {
+        this.custCountry = custCountry;
     }
 
-    public String getEtCustHomePhone() {
-        return etCustHomePhone;
+    public String getCustHomePhone() {
+        return custHomePhone;
     }
 
-    public void setEtCustHomePhone(String etCustHomePhone) {
-        this.etCustHomePhone = etCustHomePhone;
+    public void setCustHomePhone(String custHomePhone) {
+        this.custHomePhone = custHomePhone;
     }
 
-    public String getEtCustBusPhone() {
-        return etCustBusPhone;
+    public String getCustBusPhone() {
+        return custBusPhone;
     }
 
-    public void setEtCustBusPhone(String etCustBusPhone) {
-        this.etCustBusPhone = etCustBusPhone;
+    public void setCustBusPhone(String custBusPhone) {
+        this.custBusPhone = custBusPhone;
     }
 
-    public String getEtCustEmail() {
-        return etCustEmail;
+    public String getCustEmail() {
+        return custEmail;
     }
 
-    public void setEtCustEmail(String etCustEmail) {
-        this.etCustEmail = etCustEmail;
+    public void setCustEmail(String custEmail) {
+        this.custEmail = custEmail;
     }
 
-    public int getEtAgentId() {
-        return etAgentId;
+    public int getAgentId() {
+        return agentId;
     }
 
-    public void setEtAgentId(int etAgentId) {
-        this.etAgentId = etAgentId;
+    public void setAgentId(int agentId) {
+        this.agentId = agentId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeInt(customerId);
+        parcel.writeString(custFirstName);
+        parcel.writeString(custLastName);
+        parcel.writeString(custAddress);
+        parcel.writeString(custCity);
+        parcel.writeString(custProv);
+        parcel.writeString(custPostal);
+        parcel.writeString(custCountry);
+        parcel.writeString(custHomePhone);
+        parcel.writeString(custBusPhone);
+        parcel.writeString(custEmail);
+        parcel.writeInt(agentId);
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + customerId + '\n' + "Name: " + custFirstName + " " + custLastName + '\n' +
+                "Address: " + custAddress + '\n' + custCity + " " + custProv + ", " + custPostal + '\n' + custCountry + '\n' +
+                "Email: " + custEmail + '\n' +
+                "Assigned Agent: " + agentId;
     }
 }

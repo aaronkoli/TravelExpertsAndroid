@@ -32,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:focusable="false"
                 android:inputType="textPersonName" />
         </TableRow>
 
@@ -237,12 +238,13 @@
     <LinearLayout
         android:layout_width="409dp"
         android:layout_height="160dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="571dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <Button
             android:id="@+id/btnSave"
@@ -257,5 +259,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Delete" />
+
+        <Button
+            android:id="@+id/btnHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Home" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
