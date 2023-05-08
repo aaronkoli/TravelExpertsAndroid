@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     String link = "http://192.168.100.131:8088/TravelExpertsRESTAPI_war_exploded/";
     ListView lvCustomers;
     Button btnCreate;
+    Button btnViewAll;
 
     ArrayAdapter<Customer> adapter;
     RequestQueue queue;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         lvCustomers = findViewById(R.id.lvCustomers);
         btnCreate = findViewById(R.id.btnCreate);
+        btnViewAll = findViewById(R.id.btnViewAll);
 
         queue = Volley.newRequestQueue(this);
 
@@ -47,6 +49,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CustomerForm.class);
                 intent.putExtra("mode", "add");
+                startActivity(intent);
+            }
+        });
+
+        btnViewAll.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(getApplicationContext(), AllCustomersView.class);
                 startActivity(intent);
             }
         });
