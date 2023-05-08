@@ -2,8 +2,13 @@ package com.example.travelexpertsandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.util.JsonReader;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,9 +41,13 @@ public class AllCustomersView extends AppCompatActivity {
         tvError = findViewById(R.id.tvError);
         lvCustomers = findViewById(R.id.lvCustomers);
 
+        ArrayList<Customer> list = new ArrayList<>();
+        ArrayAdapter<Customer> adapter = new ArrayAdapter<>(
+                AllCustomersView.this, android.R.layout.simple_list_item_1 ,list );
+
 
         // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(AllCustomersView.this);
+        //RequestQueue queue = Volley.newRequestQueue(AllCustomersView.this);
         String url = "http://192.168.1.198:8080/Workshop7MicahREST_war_exploded/api/customers/getallcustomers";
 
         // Request a string response from the provided URL.
@@ -46,34 +55,34 @@ public class AllCustomersView extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        tvError.setText(response);
+                        response = "{\"customers\":" + response + "}";
                         // Display the first 500 characters of the response string.
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONArray jsonArray = jsonObject.getJSONArray("customers");
-                            ArrayList<Customer> list = new ArrayList<>();
+
+                            JSONObject object = new JSONObject(response);
+                            JSONArray jsonArray = object.getJSONArray("customers");
+
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jo = jsonArray.getJSONObject(i);
-                                Customer c = null;
-                                c.setCustomerId(jo.getInt("id"));
-                                c.setCustFirstName(jo.getString("custFirstName"));
-                                c.setCustLastName(jo.getString("custLastName"));
-                                c.setEtCustAddress(jo.getString("custAddress"));
-                                c.setEtCustCity(jo.getString("custCity"));
-                                c.setEtCustProv(jo.getString("custProv"));
-                                c.setEtCustPostal(jo.getString("custPostal"));
-                                c.setEtCustCountry(jo.getString("custCountry"));
-                                c.setEtCustHomePhone(jo.getString("custHomePhone"));
-                                c.setEtCustBusPhone(jo.getString("custBusPhone"));
-                                c.setEtCustEmail(jo.getString("custEmail"));
-                                c.setEtAgentId(jo.getInt("agentId"));
+                                int customerId = (jo.getInt("id"));
+                                String custFirstName = (jo.getString("custFirstName"));
+                                String custLastName = (jo.getString("custLastName"));
+                                String custAddress = (jo.getString("custAddress"));
+                                String custCity = (jo.getString("custCity"));
+                                String custProv = (jo.getString("custProv"));
+                                String custPostal = (jo.getString("custPostal"));
+                                String custCountry = (jo.getString("custCountry"));
+                                String custHomePhone = (jo.getString("custHomePhone"));
+                                String custBusPhone = (jo.getString("custBusPhone"));
+                                String custEmail = (jo.getString("custEmail"));
+                                int agentId = (jo.getInt("agentId"));
+
+                                Customer c = new Customer(customerId, custFirstName, custLastName, custAddress,
+                                        custCity, custProv, custPostal, custCountry, custHomePhone, custBusPhone,
+                                        custEmail, agentId);
 
                                 list.add(c);
                             }
-                            Toast to = new Toast(AllCustomersView.this);
-                            to.makeText(AllCustomersView.this, list.toString(), Toast.LENGTH_LONG).show();
-                            ArrayAdapter<Customer> adapter = new ArrayAdapter<>(
-                                    AllCustomersView.this, android.R.layout.simple_list_item_1, list );
                             lvCustomers.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -82,7 +91,6 @@ public class AllCustomersView extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                tvError.setText(error.toString());
                 Toast toast = new Toast(AllCustomersView.this);
                 toast.makeText(AllCustomersView.this, error.toString(), Toast.LENGTH_LONG).show();
             }
@@ -90,6 +98,23 @@ public class AllCustomersView extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(stringRequest);
 
+
+        lvCustomers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Customer c = (Customer) lvCustomers.getItemAtPosition(position);
+
+                Intent intent = new Intent(getApplicationContext(), CustomerForm.class);
+                intent.putExtra("Customer", (Parcelable) c);
+                intent.putExtra("hasData", true);
+
+                startActivity(intent);
+            }
+        });
+
     }
+
+
+
 
 }

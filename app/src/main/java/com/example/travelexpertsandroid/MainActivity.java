@@ -23,18 +23,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lvCustomers = findViewById(R.id.lvCustomers);
         btnCreate = findViewById(R.id.btnCreate);
         btnViewAll = findViewById(R.id.btnViewAll);
 
-        lvCustomers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*lvCustomers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), CustomerForm.class);
-                intent.putExtra("customerId", adapter.getItem(position));
+                intent.putExtra("customerId", (adapter.getItem(position)).getCustomerId());
                 startActivity(intent);
             }
-        });
+        });*/
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,9 +50,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-//    private void loadData() {
-//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataSource.getAllCustomers());
-//        lvCustomers.setAdapter(adapter);
-//    }
 }
