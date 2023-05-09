@@ -30,6 +30,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class AllCustomersView extends AppCompatActivity {
+
+    String ip = "192.168.100.131";
     ListView lvCustomers;
     TextView tvError;
 
@@ -48,7 +50,7 @@ public class AllCustomersView extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         //RequestQueue queue = Volley.newRequestQueue(AllCustomersView.this);
-        String url = "http://192.168.1.198:8080/Workshop7MicahREST_war_exploded/api/customers/getallcustomers";
+        String url = "http://" + ip + ":8080/Workshop7MicahREST_war_exploded/api/customers/getallcustomers";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

@@ -27,9 +27,12 @@ import org.json.JSONObject;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CustomerForm extends AppCompatActivity {
 
+    String ip = "192.168.100.131";
     EditText etCustomerId, etCustFirstName, etCustLastName,
             etCustAddress, etCustCity, etCustProv, etCustPostal, etCustCountry,
             etCustHomePhone, etCustBusPhone, etCustEmail, etAgentId;
@@ -56,13 +59,18 @@ public class CustomerForm extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         btnHome = findViewById(R.id.btnHome);
         btnDelete = findViewById(R.id.btnDelete);
+
+        btnDelete.setEnabled(false);
         Intent intent = getIntent();
 
 
 
         if(intent.getBooleanExtra("hasData", false) == true) {
 
-            Customer c = intent.getParcelableExtra("Customer", Customer.class);
+            Customer c = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                c = intent.getParcelableExtra("Customer", Customer.class);
+            }
 
             etCustomerId.setText(c.getCustomerId() + "");
             etCustFirstName.setText(c.getCustFirstName());
@@ -79,6 +87,7 @@ public class CustomerForm extends AppCompatActivity {
 
             editAdd = "edit";
             btnSave.setText("Edit");
+            btnDelete.setEnabled(true);
         }
 
         btnHome.setOnClickListener(new View.OnClickListener() {
@@ -110,42 +119,94 @@ public class CustomerForm extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(CustomerForm.this)
-                        .setTitle("Save Customer Data")
-                        .setMessage("Are you sure you want to " + editAdd + " this customer?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    new AlertDialog.Builder(CustomerForm.this)
+                            .setTitle("Save Customer Data")
+                            .setMessage("Are you sure you want to " + editAdd + " this customer?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                if(editAdd == "add") {
-                                    addCustomer();
-                                    finish();
-                                } else if (editAdd == "edit") {
-                                    editCustomer();
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    if (validate()==true) {
+                                        if (editAdd == "add") {
+                                            addCustomer();
+                                            finish();
+                                        } else if (editAdd == "edit") {
+                                            editCustomer();
+                                        }
+                                    }
                                 }
-                            }})
-                        .setNegativeButton("No", null).show();
+                            })
+                            .setNegativeButton("Cancel", null).show();
             }
         });
     }
 
+    private boolean validate(){
+        String custFirstName = etCustFirstName.getText().toString();
+        String custLastName = etCustLastName.getText().toString();
+        String custAddress = etCustAddress.getText().toString();
+        String custCity = etCustCity.getText().toString();
+        String custProv = etCustProv.getText().toString();
+        String custPostal = etCustPostal.getText().toString();
+        String custCountry = etCustCountry.getText().toString();
+        String custHomePhone = etCustHomePhone.getText().toString();
+        String custBusPhone = etCustBusPhone.getText().toString();
+        String custEmail = etCustEmail.getText().toString();
+        String agentid = etAgentId.getText().toString();
+
+        Pattern postalRegex = Pattern.compile("^[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d$");
+        Matcher postal = postalRegex.matcher(custPostal);
+        Pattern provRegex = Pattern.compile("[A-Za-z][A-Za-z]");
+        Matcher prov = provRegex.matcher(custProv);
+
+        if(
+                custFirstName.equals(null) || custFirstName.equals("") ||
+                custLastName.equals(null) || custLastName.equals("") ||
+                custAddress.equals(null) || custAddress.equals("") ||
+                custCity.equals(null) || custCity.equals("") ||
+                custProv.equals(null) || custProv.equals("") ||
+                custPostal.equals(null) || custPostal.equals("") ||
+                custCountry.equals(null) || custCountry.equals("") ||
+                custHomePhone.equals(null) || custHomePhone.equals("") ||
+                custBusPhone.equals(null) || custBusPhone.equals("") ||
+                custEmail.equals(null) || custEmail.equals("") ||
+                agentid.equals(null) || agentid.equals("")){
+            Toast toast = new Toast(CustomerForm.this);
+            toast.makeText(CustomerForm.this, "Every input must have a value", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if(postal.find()==false){
+            Toast toast = new Toast(CustomerForm.this);
+            toast.makeText(CustomerForm.this, "Postal Code must be in format: X1X 1X1", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if(prov.find()==false){
+            Toast toast = new Toast(CustomerForm.this);
+            toast.makeText(CustomerForm.this, "Province must be in format: XX", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     private void editCustomer() {
-        String url = "http://192.168.1.198:8080/Workshop7MicahREST_war_exploded/api/customers/putcustomer";
+        String url = "http://" + ip + ":8080/Workshop7MicahREST_war_exploded/api/customers/putcustomer";
 
             JSONObject customer = new JSONObject();
             try {
-                customer.put("id", Integer.parseInt(etCustomerId.getText().toString()));
-                customer.put("custFirstName", etCustFirstName.getText().toString());
-                customer.put("custLastName", etCustLastName.getText().toString());
-                customer.put("custAddress", etCustAddress.getText().toString());
-                customer.put("custCity", etCustCity.getText().toString());
-                customer.put("custProv", etCustProv.getText().toString());
-                customer.put("custPostal", etCustPostal.getText().toString());
-                customer.put("custCountry", etCustCountry.getText().toString());
-                customer.put("custHomePhone", etCustHomePhone.getText().toString());
-                customer.put("custBusPhone", etCustBusPhone.getText().toString());
-                customer.put("custEmail", etCustEmail.getText().toString());
-                customer.put("agentId", Integer.parseInt(etAgentId.getText().toString()));
+                    customer.put("id", Integer.parseInt(etCustomerId.getText().toString()));
+                    customer.put("custFirstName", etCustFirstName.getText().toString());
+                    customer.put("custLastName", etCustLastName.getText().toString());
+                    customer.put("custAddress", etCustAddress.getText().toString());
+                    customer.put("custCity", etCustCity.getText().toString());
+                    customer.put("custProv", etCustProv.getText().toString());
+                    customer.put("custPostal", etCustPostal.getText().toString());
+                    customer.put("custCountry", etCustCountry.getText().toString());
+                    customer.put("custHomePhone", etCustHomePhone.getText().toString());
+                    customer.put("custBusPhone", etCustBusPhone.getText().toString());
+                    customer.put("custEmail", etCustEmail.getText().toString());
+                    customer.put("agentId", Integer.parseInt(etAgentId.getText().toString()));
             }
             catch (JSONException e) {
                 Toast toast = new Toast(CustomerForm.this);
@@ -175,7 +236,7 @@ public class CustomerForm extends AppCompatActivity {
 
 
     private void addCustomer() {
-        String url = "http://192.168.1.198:8080/Workshop7MicahREST_war_exploded/api/customers/postcustomer";
+        String url = "http://" + ip + ":8080/Workshop7MicahREST_war_exploded/api/customers/postcustomer";
 
 
         JSONObject customer = new JSONObject();
@@ -222,7 +283,7 @@ public class CustomerForm extends AppCompatActivity {
 
     private void deleteCustomer() {
         RequestQueue queue = Volley.newRequestQueue(CustomerForm.this);
-        String url = "http://192.168.1.198:8080/Workshop7MicahREST_war_exploded/api/customers/deletecustomer/" + etCustomerId.getText().toString();
+        String url = "http://" + ip + ":8080/Workshop7MicahREST_war_exploded/api/customers/deletecustomer/" + etCustomerId.getText().toString();
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
